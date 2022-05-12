@@ -22,9 +22,33 @@ const routes = [
     }
   },
   {
+    path: '/postlist',
+    name: 'postlist',
+    component: () => import('../views/ListsView.vue'),
+    meta:{
+      requiresAuth:true
+    }
+  },
+  {
+    path: '/postcreate',
+    name: 'postcreate',
+    component: () => import('../views/PostCreateView.vue'),
+    meta:{
+      requiresAuth:true
+    }
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import('../views/LoginView.vue'),
+    meta:{
+      visitor:true
+    }
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import('../views/RegisterView.vue'),
     meta:{
       visitor:true
     }

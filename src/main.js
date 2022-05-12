@@ -2,8 +2,12 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import vuejquery from 'vue-jquery'
+Vue.use(vuejquery)
+window.$ = window.jQuery = require('jquery')
+window.toastr = require("toastr")
 require("bootstrap")
-import 'bootstrap/dist/css/bootstrap.css'
+import './assets/scss/app.scss'
 
 Vue.config.productionTip = false
 

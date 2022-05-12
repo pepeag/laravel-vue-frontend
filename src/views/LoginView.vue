@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import toastr from 'toastr';
 export default {
 name: "LoginView",
 data() {
@@ -28,12 +29,17 @@ data() {
   methods:{
     login(){
       this.$store.dispatch('login',this.credentials)
-      .then(()=>{
+      .then(res=>{
+        console.log(res.data)
+        toastr.success(res.data.message)
         this.$router.push({
           name:'home'
         })
       }).catch(err=>{
-        console.log(err)
+        for(const[k,v] of Object.entries(err.response.data.errors)){
+          toastr.error(v);
+          console.log(k);
+        }
       })
     }
   }

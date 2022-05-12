@@ -2,9 +2,6 @@
   <div class="container col-md-10 mx-auto">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
-        <router-link class="navbar-brand">
-          <img src="../assets/logo.png" class="m-25" alt="logo">
-        </router-link>
         <button
           class="navbar-toggler"
           type="button"
@@ -22,7 +19,7 @@
               <router-link class="nav-link" aria-current="page" to="/">Home</router-link>
             </li>
             <li class="nav-item" v-if="loggedIn">
-              <router-link class="nav-link" aria-current="page" to="">Post</router-link>
+              <router-link class="nav-link" aria-current="page" to="/postlist">Post</router-link>
             </li>
             <li class="nav-item" >
               <router-link class="nav-link" aria-current="page" to="/about">About</router-link>
@@ -31,7 +28,7 @@
               <router-link class="nav-link" aria-current="page" to="/login">Login</router-link>
             </li>
             <li class="nav-item" v-if="!loggedIn">
-              <router-link class="nav-link" aria-current="page" :to="{name:'register'}">Reqister</router-link>
+              <router-link class="nav-link" aria-current="page" :to="{name:'register'}">Register</router-link>
             </li>
             <li class="nav-item" v-if="loggedIn">
               <router-link class="nav-link" aria-current="page" :to="{name:'logout'}">Logout</router-link>

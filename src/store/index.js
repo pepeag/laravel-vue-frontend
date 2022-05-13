@@ -9,6 +9,7 @@ export default new Vuex.Store({
     token: localStorage.getItem('accessToken') || null,
     posts: []
   },
+
   getters: {
     loggedIn(state) {
       return state.token !== null
@@ -18,6 +19,7 @@ export default new Vuex.Store({
       return state.posts
     }
   },
+
   mutations: {
     // state payload
     setToken(state, token) {
@@ -74,10 +76,11 @@ export default new Vuex.Store({
         })
       })
     },
-    async getPosts(context) {
+
+    getPosts(context, page) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
       return new Promise((resolve, reject) => {
-        axios.get("http://localhost:8000/api/posts")
+        axios.get('http://localhost:8000/api/posts?page=' + page)
           .then((response) => {
             context.commit("setPosts", response.data.data);
             resolve(response.data);
@@ -102,19 +105,58 @@ export default new Vuex.Store({
         })
       })
     },
-    deletePost(context,id){
+
+    deletePost(context, id) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
       return new Promise((resolve, reject) => {
-        axios.delete('http://localhost:8000/api/posts'+id, {
-          
-        }).then(res => {
-          console.log(context)
+        axios.delete('http://localhost:8000/api/posts/' + id)
+          .then(res => {
+            console.log(context)
+            resolve(res.data)
+          }).catch(err => {
+            reject(err)
+          })
+      })
+    },
+
+    searchPosts(context, search) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+      return new Promise((resolve, reject) => {
+        axios.get('http://localhost:8000/api/posts?search=' + search).then(res => {
           resolve(res.data)
+          console.log(context)
         }).catch(err => {
           reject(err)
         })
       })
-    }
+    },
+
+    editPost(context, id) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+      return new Promise((resolve, reject) => {
+        axios.get('http://localhost:8000/api/posts/' + id).then(res => {
+          resolve(res.data)
+          console.log(context)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+
+    updatePost(context, { id, posts }) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+      return new Promise((resolve, reject) => {
+        axios.put('http://localhost:8000/api/posts/' + id, {
+          title: posts.title,
+          description: posts.description
+        }).then(res => {
+          resolve(res.data)
+          console.log(context)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
   },
   modules: {
   }

@@ -38,6 +38,14 @@ const routes = [
     }
   },
   {
+    path: '/postedit',
+    name: 'postedit',
+    component: () => import('../views/PostEditView.vue'),
+    meta:{
+      requiresAuth:true
+    }
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import('../views/LoginView.vue'),

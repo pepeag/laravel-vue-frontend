@@ -19,7 +19,10 @@
               <router-link class="nav-link" aria-current="page" to="/">Home</router-link>
             </li>
             <li class="nav-item" v-if="loggedIn">
-              <router-link class="nav-link" aria-current="page" to="/postlist">Post</router-link>
+              <router-link class="nav-link" aria-current="page" to="/postlist">Posts</router-link>
+            </li>
+            <li class="nav-item" v-if="loggedIn">
+              <router-link class="nav-link" aria-current="page" to="/userlist">Users</router-link>
             </li>
             <li class="nav-item" >
               <router-link class="nav-link" aria-current="page" to="/about">About</router-link>

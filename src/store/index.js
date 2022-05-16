@@ -7,7 +7,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     token: localStorage.getItem('accessToken') || null,
-    posts: []
+    posts: [],
+    users: []
   },
 
   getters: {
@@ -17,6 +18,10 @@ export default new Vuex.Store({
     myPosts(state) {
       console.log(state.posts);
       return state.posts
+    },
+    myUsers(state) {
+      console.log(state.users);
+      return state.users
     }
   },
 
@@ -30,6 +35,9 @@ export default new Vuex.Store({
     },
     setPosts(state, posts) {
       state.posts = posts
+    },
+    setUsers(state, users) {
+      state.users = users
     }
   },
 
@@ -157,6 +165,68 @@ export default new Vuex.Store({
         })
       })
     },
+
+    importPosts(context, file) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+      return new Promise((resolve, reject) => {
+        axios.post('http://localhost:8000/api/import/',file, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+        }).then(res => {
+          resolve(res.data)
+          console.log(context)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+
+    // Users
+    getUsers(context) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+      return new Promise((resolve, reject) => {
+        axios.get('http://localhost:8000/api/users/')
+          .then((response) => {
+            context.commit("setUsers", response.data.data);
+            resolve(response.data);
+          })
+          .catch((error) => {
+            reject(error)
+          });
+      });
+    },
+
+    editUser(context, id) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+      return new Promise((resolve, reject) => {
+        axios.get('http://localhost:8000/api/users/' + id).then(res => {
+          resolve(res.data)
+          console.log(context)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+
+    updateUser(context, { id, user }) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+      return new Promise((resolve, reject) => {
+        axios.put('http://localhost:8000/api/users/' + id, {
+          name: user.name,
+          email: user.email,
+          password: user.password
+        }).then(res => {
+          resolve(res.data)
+          console.log(context)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+
+
+
   },
   modules: {
   }

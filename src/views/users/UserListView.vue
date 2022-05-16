@@ -1,16 +1,17 @@
 <template>
-  <div class="container" id="app">
+  <div>
+   <div class="container" id="app">
     <div class="row">
-      <Pagination
+      <!-- <Pagination
         :data="posts"
         @pagination-change-page="getPosts"
         :limit="3"
         size="large"
         align="center"
         :showDisabled="false"
-      ></Pagination>
+      ></Pagination> -->
       <div class="col-md-6 mx-auto">
-        <form action="" @submit.prevent="searchPosts">
+        <!-- <form action="" @submit.prevent="searchPosts">
           <div class="input-group my-3 float-start">
             <input
               type="text"
@@ -28,18 +29,13 @@
               Search
             </button>
           </div>
-        </form>
-        <router-link
-          class="btn btn-primary mt-3 float-end my-3"
-          to="/postcreate"
-          >Create Post</router-link
-        >
-        <button
+        </form> -->
+        <!-- <button
           class="btn btn-success mt-3 me-3 float-end my-3"
           @click="importModal"
         >
           Import Posts
-        </button>
+        </button> -->
         <table class="table table-striped">
           <thead>
             <tr class="text-center">
@@ -50,19 +46,18 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="post in posts.data" :key="post.id" class="text-center">
-              <td>{{ post.id }}</td>
-              <td>{{ post.title }}</td>
-              <td>{{ post.description }}</td>
+            <tr v-for="user in users" :key="user.id" class="text-center">
+              <td>{{ user.id }}</td>
+              <td>{{ user.name }}</td>
+              <td>{{ user.email }}</td>
               <td>
                 <router-link
                   class="btn btn-sm btn-info me-3"
-                  :to="{ name: 'postedit', params: { id: post.id } }"
+                  :to="{ name: 'useredit', params: { id: user.id } }"
                   >Edit</router-link
                 >
                 <button
                   class="btn btn-sm btn-danger"
-                  @click="confirmDelete(post.id)"
                 >
                   Delete
                 </button>
@@ -70,18 +65,9 @@
             </tr>
           </tbody>
         </table>
-        <download-excel
-          class="btn btn-success"
-          :data="posts.data"
-          tag-name="div"
-          type="csv"
-          name="posts.csv"
-          title="Download"
-          >Download</download-excel
-        >
         <!-- <pagination :data="posts" @pagination-change-page="getResults"></pagination> -->
       </div>
-      <div id="modalDelete" tabindex="-1" class="modal fade" role="dialog">
+      <!-- <div id="modalDelete" tabindex="-1" class="modal fade" role="dialog">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -114,8 +100,8 @@
             </div>
           </div>
         </div>
-      </div>
-      <div id="importModal" tabindex="-1" class="modal fade" role="dialog">
+      </div> -->
+      <!-- <div id="importModal" tabindex="-1" class="modal fade" role="dialog">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -129,100 +115,51 @@
             </div>
             <div class="modal-body">
               <div class="card-body">
-                <form  enctype="multipart/form-data">
+                <form id="import-form">
                   <input
-                   id="file"
-                    name="file"
                     type="file"
+                    :v-model="file"
                     accept=".csv"
                     class="form-control"
                     required
-                    ref="file"
                   />
                   <br />
-                  <button class="btn btn-success" @click.prevent="importPosts">Import Data</button>
+                  <button class="btn btn-success" @click.prevent="importPosts()">Import Data</button>
                 </form>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
+  </div>
   </div>
 </template>
 
 <script>
-import Vue from "vue";
-import Pagination from "shetabit-laravel-vue-pagination";
-import JsonExcel from "vue-json-excel";
-
-Vue.component("downloadExcel", JsonExcel);
-import $ from "jquery";
-import toastr from "toastr";
-// import axios from 'axios';
 export default {
-  components: {
-    Pagination: Pagination,
-  },
-  name: "ListsView",
-  data: () => ({
-    id: "",
-    show: false,
-    posts: {},
-    search: "",
-  }),
-  computed: {
-    myPosts() {
+name:"UserListView",
+data:()=>({
+  users:{},
+}),
+computed: {
+    myUsers() {
       return this.$store.getters.myPosts;
     },
   },
   mounted() {
-    this.getPosts();
+    this.getUsers();
   },
-  methods: {
-    confirmDelete(id) {
-      this.id = id;
-      $("#modalDelete").modal("show");
-    },
-
-    deletePost(id) {
-      this.$store.dispatch("deletePost", id).then((res) => {
-        $("#modalDelete").modal("hide");
-        toastr.success(res.message);
-        this.$forceUpdate();
-      });
-    },
-
-    getPosts(page = 1) {
-      this.$store.dispatch("getPosts", page).then((res) => {
-        this.posts = res;
-      });
-    },
-
-    searchPosts() {
-      this.$store
-        .dispatch("searchPosts", this.search)
-        .then((res) => {
-          this.posts= res
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-
-    importModal() {
-      $("#importModal").modal("show");
-    },
-
-    importPosts() {
-     let formData = new FormData();
-     formData.append('file', document.getElementById('file').files[0]);
-     console.log(formData);
-      this.$store.dispatch("importPosts", formData);
-    },
-  },
-};
+methods:{
+  getUsers(){
+    this.$store.dispatch("getUsers").then(res=>{
+      this.users = res.data
+    })
+  }
+}
+}
 </script>
 
 <style>
+
 </style>

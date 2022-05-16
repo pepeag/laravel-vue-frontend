@@ -11,6 +11,8 @@ window.toastr = require("toastr")
 require("bootstrap")
 import './assets/scss/app.scss'
 Vue.config.productionTip = false
+window.Vue = require('vue');
+
 
 // Vue.component('VuePaginate', require('shetabit-laravel-vue-pagination'));
 

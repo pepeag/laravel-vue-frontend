@@ -21,8 +21,8 @@ name: "LoginView",
 data() {
     return {
       credentials: {
-        email: "phyo@gmail.com",
-        password: "12345678",
+        email: "pepeag@gmail.com",
+        password: "password",
       },
     };
   },

@@ -46,6 +46,22 @@ const routes = [
     }
   },
   {
+    path: '/userlist',
+    name: 'userlist',
+    component: () => import('../views/users/UserListView.vue'),
+    meta:{
+      requiresAuth:true
+    }
+  },
+  {
+    path: '/useredit',
+    name: 'useredit',
+    component: () => import('../views/users/UserEditView.vue'),
+    meta:{
+      requiresAuth:true
+    }
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import('../views/LoginView.vue'),

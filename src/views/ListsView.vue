@@ -1,14 +1,6 @@
 <template>
   <div class="container" id="app">
     <div class="row">
-      <Pagination
-        :data="posts"
-        @pagination-change-page="getPosts"
-        :limit="3"
-        size="large"
-        align="center"
-        :showDisabled="false"
-      ></Pagination>
       <div class="col-md-6 mx-auto">
         <form action="" @submit.prevent="searchPosts">
           <div class="input-group my-3 float-start">
@@ -76,9 +68,11 @@
           tag-name="div"
           type="csv"
           name="posts.csv"
-          title="Download"
           >Download</download-excel
         >
+        <div>
+          <LaravelVuePagination :data="posts" :show-disabled="true" @pagination-change-page="getPosts"/>
+        </div>
         <!-- <pagination :data="posts" @pagination-change-page="getResults"></pagination> -->
       </div>
       <div id="modalDelete" tabindex="-1" class="modal fade" role="dialog">
@@ -153,18 +147,19 @@
 
 <script>
 import Vue from "vue";
-import Pagination from "shetabit-laravel-vue-pagination";
+//import paginationVue from "shetabit-laravel-vue-pagination";
+import LaravelVuePagination from 'laravel-vue-pagination';
 import JsonExcel from "vue-json-excel";
-
 Vue.component("downloadExcel", JsonExcel);
+//Vue.component("paginationVue", paginationVue);
 import $ from "jquery";
 import toastr from "toastr";
 // import axios from 'axios';
 export default {
-  components: {
-    Pagination: Pagination,
-  },
   name: "ListsView",
+  components: {
+    LaravelVuePagination
+  },
   data: () => ({
     id: "",
     show: false,
@@ -195,7 +190,7 @@ export default {
 
     getPosts(page = 1) {
       this.$store.dispatch("getPosts", page).then((res) => {
-        this.posts = res;
+        this.posts = res.data;
       });
     },
 

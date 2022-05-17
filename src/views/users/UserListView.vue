@@ -1,17 +1,9 @@
 <template>
   <div>
-   <div class="container" id="app">
-    <div class="row">
-      <!-- <Pagination
-        :data="posts"
-        @pagination-change-page="getPosts"
-        :limit="3"
-        size="large"
-        align="center"
-        :showDisabled="false"
-      ></Pagination> -->
-      <div class="col-md-6 mx-auto">
-        <!-- <form action="" @submit.prevent="searchPosts">
+    <div class="container" id="app">
+      <div class="row">
+        <div class="col-md-6 mx-auto">
+          <!-- <form action="" @submit.prevent="searchPosts">
           <div class="input-group my-3 float-start">
             <input
               type="text"
@@ -30,136 +22,157 @@
             </button>
           </div>
         </form> -->
-        <!-- <button
+          <!-- <button
           class="btn btn-success mt-3 me-3 float-end my-3"
           @click="importModal"
         >
           Import Posts
         </button> -->
-        <table class="table table-striped">
-          <thead>
-            <tr class="text-center">
-              <th>ID</th>
-              <th>Title</th>
-              <th>Description</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="user in users" :key="user.id" class="text-center">
-              <td>{{ user.id }}</td>
-              <td>{{ user.name }}</td>
-              <td>{{ user.email }}</td>
-              <td>
-                <router-link
-                  class="btn btn-sm btn-info me-3"
-                  :to="{ name: 'useredit', params: { id: user.id } }"
-                  >Edit</router-link
-                >
+          <table class="table table-striped">
+            <thead>
+              <tr class="text-center">
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="user in users.data" :key="user.id" class="text-center">
+                <td>{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                  <router-link
+                    class="btn btn-sm btn-info me-3"
+                    :to="{ name: 'useredit', params: { id: user.id } }"
+                    >Edit</router-link
+                  >
+                  <button
+                    id="delete-btn"
+                    class="btn btn-sm btn-danger"
+                    @click.prevent="confirmDelete(user.id)"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <LaravelVuePagination
+          class="float-end"
+            :data="users"
+            :show-disabled="true"
+            @pagination-change-page="getUsers"
+          />
+        </div>
+        <div id="modalDelete" tabindex="-1" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Delete Post</h5>
                 <button
-                  class="btn btn-sm btn-danger"
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <p v-if="deleteId != loginUser">Are You Sure Want to delete?</p>
+                <p v-else>
+                  <span class="text-danger">{{ msg }}</span> Are You Sure Want
+                  to delete?
+                </p>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Cancle
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  @click.prevent="deleteUser(deleteId)"
                 >
                   Delete
                 </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <!-- <pagination :data="posts" @pagination-change-page="getResults"></pagination> -->
-      </div>
-      <!-- <div id="modalDelete" tabindex="-1" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Delete Post</h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <p>Are You Sure Want to delete?</p>
-            </div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Cancle
-              </button>
-              <button
-                type="button"
-                class="btn btn-primary"
-                @click="deletePost(id)"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      </div> -->
-      <!-- <div id="importModal" tabindex="-1" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="formModalLabel">Import Post Data</h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <div class="card-body">
-                <form id="import-form">
-                  <input
-                    type="file"
-                    :v-model="file"
-                    accept=".csv"
-                    class="form-control"
-                    required
-                  />
-                  <br />
-                  <button class="btn btn-success" @click.prevent="importPosts()">Import Data</button>
-                </form>
               </div>
             </div>
           </div>
         </div>
-      </div> -->
+      </div>
     </div>
-  </div>
   </div>
 </template>
 
 <script>
+import $ from "jquery";
+import LaravelVuePagination from "laravel-vue-pagination";
+import toastr from "toastr";
 export default {
-name:"UserListView",
-data:()=>({
-  users:{},
-}),
-computed: {
+  name: "UserListView",
+  components: {
+    LaravelVuePagination,
+  },
+
+  data: () => ({
+    users: {},
+    loginUser: "",
+    msg: "You Are Now Login ! ",
+    deleteId: "",
+  }),
+
+  computed: {
     myUsers() {
       return this.$store.getters.myPosts;
     },
   },
+
   mounted() {
     this.getUsers();
+    this.getLoginUser();
   },
-methods:{
-  getUsers(){
-    this.$store.dispatch("getUsers").then(res=>{
-      this.users = res.data
-    })
-  }
-}
-}
+
+  methods: {
+    getUsers(page = 1) {
+      this.$store.dispatch("getUsers", page).then((res) => {
+        this.users = res.data;
+      });
+    },
+    getLoginUser() {
+      this.$store.dispatch("getLoginUser").then((res) => {
+        this.loginUser = res.data.id;
+      });
+    },
+    confirmDelete(id) {
+      $("#modalDelete").modal("show");
+      this.deleteId = id;
+      if (this.deleteId == this.loginUser) {
+        $("#modalDelete").modal("show");
+      }
+    },
+    deleteUser(deleteId) {
+      this.$store
+        .dispatch("deleteUser", { id: deleteId, loginId: this.loginUser })
+        .then((res) => {
+          if (this.loginUser) {
+            toastr.success(res.message, { fadeAway: 2000 });
+            $("#modalDelete").modal("hide");
+            location.reload();
+          }
+          toastr.success(res.message, { fadeAway: 4000 });
+          this.$router.push({
+            name: "login",
+          });
+        });
+    },
+  },
+};
 </script>
 
 <style>
-
 </style>

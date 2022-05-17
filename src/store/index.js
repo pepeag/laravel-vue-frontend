@@ -169,10 +169,10 @@ export default new Vuex.Store({
     importPosts(context, file) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
       return new Promise((resolve, reject) => {
-        axios.post('http://localhost:8000/api/import/',file, {
+        axios.post('http://localhost:8000/api/import/', file, {
           headers: {
             'Content-Type': 'multipart/form-data'
-        }
+          }
         }).then(res => {
           resolve(res.data)
           console.log(context)
@@ -183,10 +183,13 @@ export default new Vuex.Store({
     },
 
     // Users
-    getUsers(context) {
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+    getUsers(context, page) {
       return new Promise((resolve, reject) => {
-        axios.get('http://localhost:8000/api/users/')
+        axios.get('http://localhost:8000/api/users?page=' + page, {
+          headers: {
+            'Authorization': 'Bearer ' + context.state.token
+          }
+        })
           .then((response) => {
             context.commit("setUsers", response.data.data);
             resolve(response.data);
@@ -225,7 +228,34 @@ export default new Vuex.Store({
       })
     },
 
+    getLoginUser(context) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+      return new Promise((resolve, reject) => {
+        axios.get('http://localhost:8000/api/get-user/')
+          .then((response) => {
+            resolve(response.data);
+          })
+          .catch((error) => {
+            reject(error)
+          });
+      });
+    },
 
+    deleteUser(context, { id, loginId }) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+      return new Promise((resolve, reject) => {
+        axios.get('http://localhost:8000/api/delete-user/' + id)
+          .then(res => {
+            if (id == loginId) {
+              localStorage.removeItem('accessToken')
+              context.commit('removeToken')
+            }
+            resolve(res.data)
+          }).catch(err => {
+            reject(err)
+          })
+      })
+    },
 
   },
   modules: {

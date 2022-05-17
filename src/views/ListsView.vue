@@ -64,13 +64,13 @@
         </table>
         <download-excel
           class="btn btn-success"
-          :data="posts.data"
-          tag-name="div"
+          :data ="posts.data"
           type="csv"
+          :fields="json_fields"
           name="posts.csv"
-          >Download</download-excel
+          >Download CSV</download-excel
         >
-        <div>
+        <div class="float-end">
           <LaravelVuePagination :data="posts" :show-disabled="true" @pagination-change-page="getPosts"/>
         </div>
         <!-- <pagination :data="posts" @pagination-change-page="getResults"></pagination> -->
@@ -147,14 +147,11 @@
 
 <script>
 import Vue from "vue";
-//import paginationVue from "shetabit-laravel-vue-pagination";
 import LaravelVuePagination from 'laravel-vue-pagination';
 import JsonExcel from "vue-json-excel";
 Vue.component("downloadExcel", JsonExcel);
-//Vue.component("paginationVue", paginationVue);
 import $ from "jquery";
 import toastr from "toastr";
-// import axios from 'axios';
 export default {
   name: "ListsView",
   components: {
@@ -165,6 +162,11 @@ export default {
     show: false,
     posts: {},
     search: "",
+    json_fields: {
+        "ID": "id",
+        "Title": "title",
+        "Description": "description",
+      },
   }),
   computed: {
     myPosts() {
@@ -184,7 +186,7 @@ export default {
       this.$store.dispatch("deletePost", id).then((res) => {
         $("#modalDelete").modal("hide");
         toastr.success(res.message);
-        this.$forceUpdate();
+        location.reload();
       });
     },
 
@@ -198,7 +200,7 @@ export default {
       this.$store
         .dispatch("searchPosts", this.search)
         .then((res) => {
-          this.posts= res
+          this.posts = res.data
         })
         .catch((error) => {
           console.log(error);
@@ -213,7 +215,11 @@ export default {
      let formData = new FormData();
      formData.append('file', document.getElementById('file').files[0]);
      console.log(formData);
-      this.$store.dispatch("importPosts", formData);
+      this.$store.dispatch("importPosts", formData).then(res=>{
+        toastr.success(res.message,{fadeAway:2000})
+        $("#importModal").modal("hide");
+        location.reload();
+      })
     },
   },
 };

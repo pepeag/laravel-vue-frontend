@@ -3,7 +3,7 @@
     <navbar></navbar>
    <div class="row">
      <div class="col-md-3">
-       <div class="col-md-2 ms-5 mt-2">
+       <div class="col-md-2 ms-5 my-3">
          <a href="" v-if="username" class="btn btn-sm btn-dark text-center ms-5">{{username}}</a>
        </div>
      </div>

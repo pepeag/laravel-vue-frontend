@@ -1,6 +1,10 @@
 <template>
-    <div class="container">
-    <form action="" @submit.prevent="updateUser()" class="col-md-6 mx-auto my-3">
+  <div class="container">
+    <form
+      action=""
+      @submit.prevent="updateUser()"
+      class="col-md-6 mx-auto my-3"
+    >
       <div class="mb-3">
         <label for="" class="form-label">Name</label>
         <input
@@ -35,24 +39,23 @@
 </template>
 
 <script>
-import toastr from 'toastr';
+import toastr from "toastr";
 export default {
-name: "UserEditView",
-data:()=>({
-  user:{
-    name:"",
-    email:"",
-  }
-}),
-mounted() {
+  name: "UserEditView",
+  data: () => ({
+    user: {
+      name: "",
+      email: "",
+    },
+  }),
+  mounted() {
     this.editUser();
   },
-methods:{
-  clearForm(){
-    this.user.name = "",
-    this.user.email = ""
-  },
-  editUser(){
+  methods: {
+    clearForm() {
+      (this.user.name = ""), (this.user.email = "");
+    },
+    editUser() {
       let id = this.$route.params.id;
       if (id) {
         this.$store.dispatch("editUser", id).then((res) => {
@@ -64,9 +67,9 @@ methods:{
           name: "userlist",
         });
       }
-  },
+    },
 
-   updateUser() {
+    updateUser() {
       let id = this.$route.params.id;
       this.$store
         .dispatch("updateUser", { id, user: this.user })
@@ -76,15 +79,14 @@ methods:{
             .push({
               name: "userlist",
             })
-            .catch(err => {
+            .catch((err) => {
               console.log(err);
             });
         });
     },
-}
-}
+  },
+};
 </script>
 
 <style>
-
 </style>

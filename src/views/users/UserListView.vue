@@ -60,7 +60,7 @@
             </tbody>
           </table>
           <LaravelVuePagination
-          class="float-end"
+            class="float-end"
             :data="users"
             :show-disabled="true"
             @pagination-change-page="getUsers"
@@ -143,11 +143,13 @@ export default {
         this.users = res.data;
       });
     },
+
     getLoginUser() {
       this.$store.dispatch("getLoginUser").then((res) => {
         this.loginUser = res.data.id;
       });
     },
+
     confirmDelete(id) {
       $("#modalDelete").modal("show");
       this.deleteId = id;
@@ -155,6 +157,7 @@ export default {
         $("#modalDelete").modal("show");
       }
     },
+
     deleteUser(deleteId) {
       this.$store
         .dispatch("deleteUser", { id: deleteId, loginId: this.loginUser })

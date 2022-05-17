@@ -1,6 +1,10 @@
 <template>
   <div class="container">
-    <h1>HOme Page</h1>
+    <div class="row">
+      <div class="col-md-6 mx-auto">
+        <h1>This Is Home Page</h1>
+      </div>
+    </div>
   </div>
 </template>
 

@@ -1,10 +1,8 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-6 mx-auto">
-        <h1>This Is Home Page</h1>
-      </div>
-    </div>
+  <div class="container col-md-10 mx-auto">
+    <h1 class="text-center mt-5">
+      <span class="text-center">This is home page</span>
+    </h1>
   </div>
 </template>
 
@@ -12,9 +10,6 @@
 // @ is an alias to /src
 
 export default {
-  name: 'HomeView',
-  components: {
-   
-  }
-}
+  name: "HomeView",
+};
 </script>

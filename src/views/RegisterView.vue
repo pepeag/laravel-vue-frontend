@@ -40,12 +40,12 @@ data() {
         this.$router.push({
           name:'login'
         })
-      }).catch(err=>{
-        for(const[k,v] of Object.entries(err.response.data.errors)){
-          toastr.error(v);
-          console.log(k);
-        }
-      })
+      }).catch((err) => {
+          for (const [k, v] of Object.entries(err.response.data.errors)) {
+            toastr.error(v);
+            console.log(k);
+          }
+        });
     }
   }
 }

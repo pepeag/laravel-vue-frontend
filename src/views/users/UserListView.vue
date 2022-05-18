@@ -3,31 +3,26 @@
     <div class="container" id="app">
       <div class="row">
         <div class="col-md-6 mx-auto">
-          <!-- <form action="" @submit.prevent="searchPosts">
-          <div class="input-group my-3 float-start">
-            <input
-              type="text"
-              v-model="search"
-              class="form-control outline-none"
-              placeholder="Search"
-              aria-label="Recipient's username"
-              aria-describedby="button-addon2"
-            />
-            <button
-              class="btn btn-outline-none btn-success"
-              type="submit"
-              id="button-addon2"
-            >
-              Search
-            </button>
-          </div>
-        </form> -->
-          <!-- <button
-          class="btn btn-success mt-3 me-3 float-end my-3"
-          @click="importModal"
-        >
-          Import Posts
-        </button> -->
+          <form action="" @submit.prevent="searchUsers">
+            <div class="input-group my-3 float-start">
+              <input
+                type="text"
+                v-model="search"
+                class="form-control outline-none"
+                placeholder="Search"
+                aria-label="Recipient's username"
+                aria-describedby="button-addon2"
+              />
+              <button
+                class="btn btn-outline-none btn-success"
+                type="submit"
+                id="button-addon2"
+              >
+                Search
+              </button>
+            </div>
+          </form>
+
           <table class="table table-striped">
             <thead>
               <tr class="text-center">
@@ -122,8 +117,9 @@ export default {
   data: () => ({
     users: {},
     loginUser: "",
-    msg: "You Are Now Login ! ",
     deleteId: "",
+    search: "",
+    msg: "You Are Now Login ! ",
   }),
 
   computed: {
@@ -142,6 +138,17 @@ export default {
       this.$store.dispatch("getUsers", page).then((res) => {
         this.users = res.data;
       });
+    },
+
+    searchUsers() {
+      this.$store
+        .dispatch("searchUsers", this.search)
+        .then((res) => {
+          this.users = res.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
 
     getLoginUser() {

@@ -1,11 +1,5 @@
 <template>
-  <div class="about">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6 mx-auto">
-          <h1>Created By PEPEAG</h1>
-        </div>
-      </div>
-    </div>
+    <div class="container col-md-10 mx-auto">
+    <h1 class="text-center mt-5"><span class="text-center">Created By PEPEAG!</span></h1>
   </div>
 </template>

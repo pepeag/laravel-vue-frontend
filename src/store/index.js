@@ -257,6 +257,18 @@ export default new Vuex.Store({
       })
     },
 
+    searchUsers(context, search) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+      return new Promise((resolve, reject) => {
+        axios.get('http://localhost:8000/api/users?search=' + search).then(res => {
+          resolve(res.data)
+          console.log(context)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+
   },
   modules: {
   }

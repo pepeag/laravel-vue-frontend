@@ -1,27 +1,26 @@
 <template>
-  <div>
-
-  </div>
+  <div></div>
 </template>
 
 <script>
-import toastr from 'toastr'
+import toastr from "toastr";
 export default {
-name: "Logout-Component",
-created(){
-    this.$store.dispatch('logout')
-      .then(res=>{
-        toastr.success(res.message)
+  name: "Logout-Component",
+  created() {
+    this.$store
+      .dispatch("logout")
+      .then((res) => {
+        toastr.success(res.message);
         this.$router.push({
-          name:'login'
-        })
-      }).catch(err=>{
-        console.log(err)
+          name: "login",
+        });
       })
-}
-}
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+};
 </script>
 
 <style>
-
 </style>

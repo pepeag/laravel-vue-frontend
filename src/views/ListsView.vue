@@ -32,6 +32,14 @@
         >
           Import Posts
         </button>
+        <download-excel
+          class="btn btn-success float-start mt-3"
+          :data ="posts.data"
+          type="csv"
+          :fields="json_fields"
+          name="posts.csv"
+          >Download CSV</download-excel
+        >
         <table class="table table-striped">
           <thead>
             <tr class="text-center">
@@ -62,14 +70,6 @@
             </tr>
           </tbody>
         </table>
-        <download-excel
-          class="btn btn-success"
-          :data ="posts.data"
-          type="csv"
-          :fields="json_fields"
-          name="posts.csv"
-          >Download CSV</download-excel
-        >
         <div class="float-end">
           <LaravelVuePagination :data="posts" :show-disabled="true" @pagination-change-page="getPosts"/>
         </div>
@@ -130,11 +130,12 @@
                     type="file"
                     accept=".csv"
                     class="form-control"
-                    required
                     ref="file"
+                    required
                   />
+                  <small v-show="show" class="text-danger"><span class="my-2">{{importErr}}</span></small>
                   <br />
-                  <button class="btn btn-success" @click.prevent="importPosts">Import Data</button>
+                  <button class="btn btn-success float-end" @click.prevent="importPosts">Import Data</button>
                 </form>
               </div>
             </div>
@@ -167,6 +168,7 @@ export default {
         "Title": "title",
         "Description": "description",
       },
+    importErr:""
   }),
   computed: {
     myPosts() {
@@ -218,7 +220,11 @@ export default {
       this.$store.dispatch("importPosts", formData).then(res=>{
         toastr.success(res.message,{fadeAway:2000})
         $("#importModal").modal("hide");
-        location.reload();
+        location.reload()
+      }).catch(err=>{
+        this.importErr = "* please choose csv file"
+        this.show = true
+        console.log("err "+err)
       })
     },
   },

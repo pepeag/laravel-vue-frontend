@@ -38,15 +38,18 @@
 import toastr from "toastr";
 export default {
   name: "PostEditView",
+
   data: () => ({
     posts: {
       title: "",
       description: "",
     },
   }),
+
   mounted() {
     this.editPost();
   },
+
   methods: {
     editPost() {
       let id = this.$route.params.id;
@@ -62,26 +65,26 @@ export default {
         });
       }
     },
+
     clearForm() {
       (this.posts.title = ""), (this.posts.description = "");
     },
+
     updatePost() {
       let id = this.$route.params.id;
       this.$store
         .dispatch("updatePost", { id, posts: this.posts })
         .then((res) => {
           toastr.success(res.message);
-          this.$router
-            .push({
-              name: "postlist",
-            })
-            .catch(err => {
-              console.log(err);
-              // for (const [k, v] of Object.entries(error.response.data.errors)) {
-              //   toastr.error(v);
-              //   console.log(k);
-              // }
-            });
+          this.$router.push({
+            name: "postlist",
+          });
+        })
+        .catch((err) => {
+          for (const [k, v] of Object.entries(err.response.data.errors)) {
+            toastr.error(v);
+            console.log(k);
+          }
         });
     },
   },

@@ -4,6 +4,7 @@
       <div class="mb-3">
         <label for="" class="form-label">Title</label>
         <input
+          autofocus
           type="text"
           class="form-control"
           v-model="posts.title"
@@ -22,7 +23,13 @@
         />
       </div>
 
-      <button type="button" class="btn btn-dark text-whit me-3" @click="clearForm" >Clear</button>
+      <button
+        type="button"
+        class="btn btn-dark text-whit me-3"
+        @click="clearForm"
+      >
+        Clear
+      </button>
       <button type="submit" class="btn btn-primary">Create</button>
     </form>
   </div>
@@ -46,7 +53,7 @@ export default {
         .dispatch("createPost", this.posts)
         .then((res) => {
           console.log(res);
-          toastr.success(res.message)
+          toastr.success(res.message);
           this.$router.push({ name: "postlist" });
         })
         .catch((error) => {
@@ -56,10 +63,9 @@ export default {
           }
         });
     },
-    clearForm(){
-      this.posts.title = "",
-      this.posts.description = ""
-    }
+    clearForm() {
+      (this.posts.title = ""), (this.posts.description = "");
+    },
   },
 };
 </script>

@@ -75,13 +75,15 @@ export default {
         .dispatch("updateUser", { id, user: this.user })
         .then((res) => {
           toastr.success(res.message);
-          this.$router
-            .push({
-              name: "userlist",
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+          this.$router.push({
+            name: "userlist",
+          });
+        })
+        .catch((err) => {
+          for (const [k, v] of Object.entries(err.response.data.errors)) {
+            toastr.error(v);
+            console.log(k);
+          }
         });
     },
   },

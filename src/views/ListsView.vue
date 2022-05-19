@@ -34,7 +34,7 @@
         </button>
         <download-excel
           class="btn btn-success float-start mt-3"
-          :data ="posts.data"
+          :data="posts.data"
           type="csv"
           :fields="json_fields"
           name="posts.csv"
@@ -71,7 +71,11 @@
           </tbody>
         </table>
         <div class="float-end">
-          <LaravelVuePagination :data="posts" :show-disabled="true" @pagination-change-page="getPosts"/>
+          <LaravelVuePagination
+            :data="posts"
+            :show-disabled="true"
+            @pagination-change-page="getPosts"
+          />
         </div>
         <!-- <pagination :data="posts" @pagination-change-page="getResults"></pagination> -->
       </div>
@@ -123,9 +127,9 @@
             </div>
             <div class="modal-body">
               <div class="card-body">
-                <form  enctype="multipart/form-data">
+                <form enctype="multipart/form-data">
                   <input
-                   id="file"
+                    id="file"
                     name="file"
                     type="file"
                     accept=".csv"
@@ -133,9 +137,16 @@
                     ref="file"
                     required
                   />
-                  <small v-show="show" class="text-danger"><span class="my-2">{{importErr}}</span></small>
+                  <small v-show="show" class="text-danger"
+                    ><span class="my-2">{{ importErr }}</span></small
+                  >
                   <br />
-                  <button class="btn btn-success float-end" @click.prevent="importPosts">Import Data</button>
+                  <button
+                    class="btn btn-success float-end"
+                    @click.prevent="importPosts"
+                  >
+                    Import Data
+                  </button>
                 </form>
               </div>
             </div>
@@ -148,7 +159,7 @@
 
 <script>
 import Vue from "vue";
-import LaravelVuePagination from 'laravel-vue-pagination';
+import LaravelVuePagination from "laravel-vue-pagination";
 import JsonExcel from "vue-json-excel";
 Vue.component("downloadExcel", JsonExcel);
 import $ from "jquery";
@@ -156,7 +167,7 @@ import toastr from "toastr";
 export default {
   name: "ListsView",
   components: {
-    LaravelVuePagination
+    LaravelVuePagination,
   },
   data: () => ({
     id: "",
@@ -164,11 +175,11 @@ export default {
     posts: {},
     search: "",
     json_fields: {
-        "ID": "id",
-        "Title": "title",
-        "Description": "description",
-      },
-    importErr:""
+      ID: "id",
+      Title: "title",
+      Description: "description",
+    },
+    importErr: "",
   }),
   computed: {
     myPosts() {
@@ -202,7 +213,7 @@ export default {
       this.$store
         .dispatch("searchPosts", this.search)
         .then((res) => {
-          this.posts = res.data
+          this.posts = res.data;
         })
         .catch((error) => {
           console.log(error);
@@ -214,18 +225,21 @@ export default {
     },
 
     importPosts() {
-     let formData = new FormData();
-     formData.append('file', document.getElementById('file').files[0]);
-     console.log(formData);
-      this.$store.dispatch("importPosts", formData).then(res=>{
-        toastr.success(res.message,{fadeAway:2000})
-        $("#importModal").modal("hide");
-        location.reload()
-      }).catch(err=>{
-        this.importErr = "* please choose csv file"
-        this.show = true
-        console.log("err "+err)
-      })
+      let formData = new FormData();
+      formData.append("file", document.getElementById("file").files[0]);
+      console.log(formData);
+      this.$store
+        .dispatch("importPosts", formData)
+        .then((res) => {
+          toastr.success(res.message, { fadeAway: 2000 });
+          $("#importModal").modal("hide");
+          location.reload();
+        })
+        .catch((err) => {
+          this.importErr = "* please choose csv file";
+          this.show = true;
+          console.log("error " + err);
+        });
     },
   },
 };

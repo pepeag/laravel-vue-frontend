@@ -74,10 +74,10 @@
                 ></button>
               </div>
               <div class="modal-body">
-                <p v-if="deleteId != loginUser">Are You Sure Want to delete?</p>
+                <p v-if="deleteId != loginUser">Are You Sure Want to Delete?</p>
                 <p v-else>
                   <span class="text-danger">{{ msg }}</span> Are You Sure Want
-                  to delete?
+                  to Delete?
                 </p>
               </div>
               <div class="modal-footer">
@@ -110,6 +110,7 @@ import LaravelVuePagination from "laravel-vue-pagination";
 import toastr from "toastr";
 export default {
   name: "UserListView",
+  
   components: {
     LaravelVuePagination,
   },

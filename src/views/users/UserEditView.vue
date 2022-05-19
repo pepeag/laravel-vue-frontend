@@ -42,6 +42,7 @@
 import toastr from "toastr";
 export default {
   name: "UserEditView",
+
   data: () => ({
     user: {
       name: "",

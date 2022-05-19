@@ -65,7 +65,7 @@
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Delete Post</h5>
+                <h5 class="modal-title">Delete User</h5>
                 <button
                   type="button"
                   class="btn-close"
@@ -110,7 +110,7 @@ import LaravelVuePagination from "laravel-vue-pagination";
 import toastr from "toastr";
 export default {
   name: "UserListView",
-  
+
   components: {
     LaravelVuePagination,
   },

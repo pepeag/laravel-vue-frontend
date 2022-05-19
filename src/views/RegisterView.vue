@@ -22,6 +22,7 @@
 import toastr from 'toastr';
 export default {
 name: "RegisterView",
+
 data() {
     return {
       formData: {
@@ -31,6 +32,7 @@ data() {
       },
     };
   },
+
   methods:{
     register(){
       this.$store.dispatch('register',this.formData)

@@ -26,7 +26,6 @@ export default new Vuex.Store({
   },
 
   mutations: {
-    // state payload
     setToken(state, token) {
       state.token = token
     },
@@ -218,7 +217,6 @@ export default new Vuex.Store({
         axios.put('http://localhost:8000/api/users/' + id, {
           name: user.name,
           email: user.email,
-          password: user.password
         }).then(res => {
           resolve(res.data)
           console.log(context)

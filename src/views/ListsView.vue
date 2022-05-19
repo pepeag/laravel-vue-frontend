@@ -92,7 +92,7 @@
               ></button>
             </div>
             <div class="modal-body">
-              <p>Are You Sure Want to delete?</p>
+              <p>Are You Sure Want to Delete?</p>
             </div>
             <div class="modal-footer">
               <button
@@ -166,9 +166,11 @@ import $ from "jquery";
 import toastr from "toastr";
 export default {
   name: "ListsView",
+
   components: {
     LaravelVuePagination,
   },
+
   data: () => ({
     id: "",
     show: false,
@@ -181,14 +183,17 @@ export default {
     },
     importErr: "",
   }),
+
   computed: {
     myPosts() {
       return this.$store.getters.myPosts;
     },
   },
+
   mounted() {
     this.getPosts();
   },
+
   methods: {
     confirmDelete(id) {
       this.id = id;
@@ -231,9 +236,9 @@ export default {
       this.$store
         .dispatch("importPosts", formData)
         .then((res) => {
-          toastr.success(res.message, { fadeAway: 2000 });
           $("#importModal").modal("hide");
           location.reload();
+          toastr.success(res.message, { fadeAway: 10000 });
         })
         .catch((err) => {
           this.importErr = "* please choose csv file";

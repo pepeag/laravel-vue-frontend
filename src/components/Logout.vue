@@ -14,6 +14,7 @@ export default {
         this.$router.push({
           name: "login",
         });
+        location.reload()
       })
       .catch((err) => {
         console.log(err);

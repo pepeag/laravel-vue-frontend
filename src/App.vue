@@ -29,7 +29,13 @@ export default {
     getLoginUser(){
       this.$store.dispatch("getLoginUser")
       .then(res=>{
-        this.username = res.data.name
+        if(res){
+          this.username = res.data.name
+        }else{
+          console.log("login")
+        }
+      }).catch(err=>{
+        console.log(err)
       })
     }
   }

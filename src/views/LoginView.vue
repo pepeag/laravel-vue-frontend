@@ -35,6 +35,7 @@ data() {
         this.$router.push({
           name:'home'
         })
+        location.reload()
       }).catch(err=>{
         for(const[k,v] of Object.entries(err.response.data.errors)){
           toastr.error(v);

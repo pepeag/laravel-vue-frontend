@@ -38,14 +38,6 @@ const routes = [
     }
   },
   {
-    path: '/postedit',
-    name: 'postedit',
-    component: () => import('../views/PostEditView.vue'),
-    meta: {
-      requiresAuth: true
-    }
-  },
-  {
     path: '/userlist',
     name: 'userlist',
     component: () => import('../views/users/UserListView.vue'),
@@ -113,7 +105,7 @@ router.beforeEach((to, from, next) => {
     }
   }
   else {
-    next() // make sure to always call next()!
+    next()
   }
 })
 

@@ -1,10 +1,9 @@
 <template>
   <div class="container">
-    <form action="" @submit.prevent="createPost" class="col-md-6 mx-auto my-3">
+    <form action="" @submit.prevent="editMode==true?updatePost():createPost()" class="col-md-6 mx-auto my-3">
       <div class="mb-3">
         <label for="" class="form-label">Title</label>
         <input
-          autofocus
           type="text"
           class="form-control"
           v-model="posts.title"
@@ -30,7 +29,9 @@
       >
         Clear
       </button>
-      <button type="submit" class="btn btn-primary">Create</button>
+      <button type="submit" class="btn btn-primary">
+        {{ editMode ? "Update" : "Create" }}
+      </button>
     </form>
   </div>
 </template>
@@ -41,12 +42,18 @@ export default {
   name: "PostCreateView",
 
   data: () => ({
+    editMode: false,
     posts: {
       title: "",
       description: "",
     },
   }),
-
+  mounted() {
+    if (this.$route.params.id) {
+      this.editMode = true;
+      this.editPost()
+    }
+  },
   methods: {
     createPost() {
       this.$store
@@ -63,6 +70,39 @@ export default {
           }
         });
     },
+
+     editPost() {
+      let id = this.$route.params.id;
+      if (id) {
+        this.$store.dispatch("editPost", id).then((res) => {
+          this.posts.title = res.data.title;
+          this.posts.description = res.data.description;
+        });
+      } else {
+        this.$router.push({
+          name: "postlist",
+        });
+      }
+    },
+
+    updatePost() {
+      let id = this.$route.params.id;
+      this.$store
+        .dispatch("updatePost", { id, posts: this.posts })
+        .then((res) => {
+          toastr.success(res.message);
+          this.$router.push({
+            name: "postlist",
+          });
+        })
+        .catch((err) => {
+          for (const [k, v] of Object.entries(err.response.data.errors)) {
+            toastr.error(v);
+            console.log(k);
+          }
+        });
+    },
+
     clearForm() {
       (this.posts.title = ""), (this.posts.description = "");
     },

@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import axios from "axios"
 
 Vue.use(Vuex)
-
+axios.defaults.baseURL = 'http://localhost:8000/api';
 export default new Vuex.Store({
   state: {
     token: localStorage.getItem('accessToken') || null,
@@ -43,7 +43,7 @@ export default new Vuex.Store({
   actions: {
     login(context, credentials) {
       return new Promise((resolve, reject) => {
-        axios.post('http://localhost:8000/api/login', {
+        axios.post('/login', {
           email: credentials.email,
           password: credentials.password
         }).then(res => {
@@ -58,7 +58,7 @@ export default new Vuex.Store({
 
     register(context, formData) {
       return new Promise((resolve, reject) => {
-        axios.post('http://localhost:8000/api/register', {
+        axios.post('/register', {
           name: formData.name,
           email: formData.email,
           password: formData.password
@@ -74,7 +74,7 @@ export default new Vuex.Store({
     logout(context) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
       return new Promise((resolve, reject) => {
-        axios.post('http://localhost:8000/api/logout').then(res => {
+        axios.post('/logout').then(res => {
           localStorage.removeItem('accessToken')
           context.commit('removeToken')
           resolve(res.data)
@@ -87,7 +87,7 @@ export default new Vuex.Store({
     getPosts(context, page) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
       return new Promise((resolve, reject) => {
-        axios.get('http://localhost:8000/api/posts?page=' + page)
+        axios.get('/posts?page=' + page)
           .then((response) => {
             context.commit("setPosts", response.data.data);
             resolve(response.data);
@@ -101,7 +101,7 @@ export default new Vuex.Store({
     createPost(context, posts) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
       return new Promise((resolve, reject) => {
-        axios.post('http://localhost:8000/api/posts', {
+        axios.post('/posts', {
           title: posts.title,
           description: posts.description,
         }).then(res => {
@@ -116,7 +116,7 @@ export default new Vuex.Store({
     deletePost(context, id) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
       return new Promise((resolve, reject) => {
-        axios.delete('http://localhost:8000/api/posts/' + id)
+        axios.delete('/posts/' + id)
           .then(res => {
             console.log(context)
             resolve(res.data)
@@ -129,7 +129,7 @@ export default new Vuex.Store({
     searchPosts(context, search) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
       return new Promise((resolve, reject) => {
-        axios.get('http://localhost:8000/api/posts?search=' + search).then(res => {
+        axios.get('/posts?search=' + search).then(res => {
           resolve(res.data)
           console.log(context)
         }).catch(err => {
@@ -141,7 +141,7 @@ export default new Vuex.Store({
     editPost(context, id) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
       return new Promise((resolve, reject) => {
-        axios.get('http://localhost:8000/api/posts/' + id).then(res => {
+        axios.get('/posts/' + id).then(res => {
           resolve(res.data)
           console.log(context)
         }).catch(err => {
@@ -153,7 +153,7 @@ export default new Vuex.Store({
     updatePost(context, { id, posts }) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
       return new Promise((resolve, reject) => {
-        axios.put('http://localhost:8000/api/posts/' + id, {
+        axios.put('/posts/' + id, {
           title: posts.title,
           description: posts.description
         }).then(res => {
@@ -168,7 +168,7 @@ export default new Vuex.Store({
     importPosts(context, file) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
       return new Promise((resolve, reject) => {
-        axios.post('http://localhost:8000/api/import/', file, {
+        axios.post('/import/', file, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -184,7 +184,7 @@ export default new Vuex.Store({
     // Users
     getUsers(context, page) {
       return new Promise((resolve, reject) => {
-        axios.get('http://localhost:8000/api/users?page=' + page, {
+        axios.get('/users?page=' + page, {
           headers: {
             'Authorization': 'Bearer ' + context.state.token
           }
@@ -202,7 +202,7 @@ export default new Vuex.Store({
     editUser(context, id) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
       return new Promise((resolve, reject) => {
-        axios.get('http://localhost:8000/api/users/' + id).then(res => {
+        axios.get('/users/' + id).then(res => {
           resolve(res.data)
           console.log(context)
         }).catch(err => {
@@ -214,9 +214,10 @@ export default new Vuex.Store({
     updateUser(context, { id, user }) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
       return new Promise((resolve, reject) => {
-        axios.put('http://localhost:8000/api/users/' + id, {
+        axios.put('/users/' + id, {
           name: user.name,
           email: user.email,
+          password:user.password
         }).then(res => {
           resolve(res.data)
           console.log(context)
@@ -229,7 +230,7 @@ export default new Vuex.Store({
     getLoginUser(context) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
       return new Promise((resolve, reject) => {
-        axios.get('http://localhost:8000/api/get-user/')
+        axios.get('/get-user/')
           .then((response) => {
             resolve(response.data);
           })
@@ -242,7 +243,7 @@ export default new Vuex.Store({
     deleteUser(context, { id, loginId }) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
       return new Promise((resolve, reject) => {
-        axios.get('http://localhost:8000/api/delete-user/' + id)
+        axios.get('/delete-user/' + id)
           .then(res => {
             if (id == loginId) {
               localStorage.removeItem('accessToken')
@@ -258,7 +259,7 @@ export default new Vuex.Store({
     searchUsers(context, search) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
       return new Promise((resolve, reject) => {
-        axios.get('http://localhost:8000/api/users?search=' + search).then(res => {
+        axios.get('/users?search=' + search).then(res => {
           resolve(res.data)
           console.log(context)
         }).catch(err => {

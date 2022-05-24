@@ -31,12 +31,16 @@ data() {
       this.$store.dispatch('login',this.credentials)
       .then(res=>{
         console.log(res.data)
-        toastr.success(res.data.message)
+        toastr.success(res.data.message,{ fadeAway: 10000 })
         this.$router.push({
           name:'home'
         })
         location.reload()
       }).catch(err=>{
+        console.log(err.response.data.message)
+        if(!err.response.data.status){
+          toastr.error(err.response.data.message)
+        }
         for(const[k,v] of Object.entries(err.response.data.errors)){
           toastr.error(v);
           console.log(k);

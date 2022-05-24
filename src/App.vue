@@ -1,13 +1,7 @@
 <template>
   <div id="app">
     <navbar></navbar>
-   <div class="row">
-     <div class="col-md-3 ms-5">
-       <div class="col-md-2 ms-5 my-3">
-         <a href="" v-if="username" class="btn btn-sm btn-dark text-center ms-5">{{username}}</a>
-       </div>
-     </div>
-   </div>
+    <login-user></login-user>
    <transition name="slide-fade">
     <router-view />
     </transition>
@@ -16,29 +10,14 @@
 </template>
 <script>
 import FooterComponent from './components/FooterComponent.vue';
+import LoginUser from './components/LoginUser.vue';
 import Navbar from "./components/Navbar.vue";
 export default {
-  components: { Navbar, FooterComponent },
-  data:()=>({
-    username:""
-  }),
-  mounted(){
-    this.getLoginUser();
-  },
-  methods:{
-    getLoginUser(){
-      this.$store.dispatch("getLoginUser")
-      .then(res=>{
-        if(res){
-          this.username = res.data.name
-        }else{
-          console.log("login")
-        }
-      }).catch(err=>{
-        console.log(err)
-      })
-    }
-  }
+  components: { Navbar, FooterComponent, LoginUser },
+  data:() => ({
+    token:""
+  })
+  
 };
 </script>
 <style>

@@ -57,7 +57,7 @@
               <td>
                 <router-link
                   class="btn btn-sm btn-info me-3"
-                  :to="{ name: 'postedit', params: { id: post.id } }"
+                  :to="{ name: 'postcreate', params: { id: post.id } }"
                   >Edit</router-link
                 >
                 <button
@@ -77,7 +77,7 @@
             @pagination-change-page="getPosts"
           />
         </div>
-        <!-- <pagination :data="posts" @pagination-change-page="getResults"></pagination> -->
+    
       </div>
       <div id="modalDelete" tabindex="-1" class="modal fade" role="dialog">
         <div class="modal-dialog">
@@ -172,6 +172,7 @@ export default {
   },
 
   data: () => ({
+    
     id: "",
     show: false,
     posts: {},

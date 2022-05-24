@@ -25,6 +25,16 @@
           aria-describedby="emailHelp"
         />
       </div>
+      <div class="mb-3">
+        <label for="" class="form-label">password</label>
+        <input
+          type="password"
+          class="form-control"
+          v-model="user.password"
+          id="password"
+          aria-describedby="emailHelp"
+        />
+      </div>
 
       <button
         type="button"
@@ -47,6 +57,7 @@ export default {
     user: {
       name: "",
       email: "",
+      password:""
     },
   }),
   mounted() {
@@ -54,7 +65,7 @@ export default {
   },
   methods: {
     clearForm() {
-      (this.user.name = ""), (this.user.email = "");
+      (this.user.name = ""), (this.user.email = ""), (this.user.password = "");
     },
     editUser() {
       let id = this.$route.params.id;
@@ -62,6 +73,7 @@ export default {
         this.$store.dispatch("editUser", id).then((res) => {
           this.user.name = res.data.name;
           this.user.email = res.data.email;
+          this.user.password = res.data.password
         });
       } else {
         this.$router.push({

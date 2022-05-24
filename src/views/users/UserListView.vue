@@ -2,7 +2,7 @@
   <div>
     <div class="container" id="app">
       <div class="row">
-        <div class="col-md-6 mx-auto">
+        <div class="col-md-8 mx-auto">
           <form action="" @submit.prevent="searchUsers">
             <div class="input-group my-3 float-start">
               <input
